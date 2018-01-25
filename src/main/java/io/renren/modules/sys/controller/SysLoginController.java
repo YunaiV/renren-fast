@@ -5,11 +5,13 @@ import com.google.code.kaptcha.Producer;
 import io.renren.common.utils.R;
 import io.renren.common.utils.ShiroUtils;
 import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.form.LoginForm;
 import io.renren.modules.sys.service.SysUserService;
 import io.renren.modules.sys.service.SysUserTokenService;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,19 +64,19 @@ public class SysLoginController extends AbstractController {
 	 * 登录
 	 */
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	public Map<String, Object> login(String username, String password, String captcha)throws IOException {
+	public Map<String, Object> login(@RequestBody LoginForm form)throws IOException {
 		//本项目已实现，前后端完全分离，但页面还是跟项目放在一起了，所以还是会依赖session
 		//如果想把页面单独放到nginx里，实现前后端完全分离，则需要把验证码注释掉(因为不再依赖session了)
-		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-		if(!captcha.equalsIgnoreCase(kaptcha)){
-			return R.error("验证码不正确");
-		}
+//		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
+//		if(!captcha.equalsIgnoreCase(kaptcha)){
+//			return R.error("验证码不正确");
+//		}
 
 		//用户信息
-		SysUserEntity user = sysUserService.queryByUserName(username);
+		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
 
 		//账号不存在、密码错误
-		if(user == null || !user.getPassword().equals(new Sha256Hash(password, user.getSalt()).toHex())) {
+		if(user == null || !user.getPassword().equals(new Sha256Hash(form.getPassword(), user.getSalt()).toHex())) {
 			return R.error("账号或密码不正确");
 		}
 

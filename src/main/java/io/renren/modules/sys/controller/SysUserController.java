@@ -10,6 +10,7 @@ import io.renren.common.validator.ValidatorUtils;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
 import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.form.PasswordForm;
 import io.renren.modules.sys.service.SysUserRoleService;
 import io.renren.modules.sys.service.SysUserService;
 import org.apache.commons.lang.ArrayUtils;
@@ -70,13 +71,13 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改密码")
 	@RequestMapping("/password")
-	public R password(String password, String newPassword){
-		Assert.isBlank(newPassword, "新密码不为能空");
+	public R password(@RequestBody PasswordForm form){
+		Assert.isBlank(form.getNewPassword(), "新密码不为能空");
 		
 		//sha256加密
-		password = new Sha256Hash(password, getUser().getSalt()).toHex();
+		String password = new Sha256Hash(form.getPassword(), getUser().getSalt()).toHex();
 		//sha256加密
-		newPassword = new Sha256Hash(newPassword, getUser().getSalt()).toHex();
+		String newPassword = new Sha256Hash(form.getNewPassword(), getUser().getSalt()).toHex();
 				
 		//更新密码
 		int count = sysUserService.updatePassword(getUserId(), password, newPassword);

@@ -26,12 +26,12 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
 
 	@Override
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
-		if(roleIdList.size() == 0){
-			return ;
-		}
-		
 		//先删除用户与角色关系
 		sysUserRoleDao.delete(userId);
+
+		if(roleIdList == null || roleIdList.size() == 0){
+			return ;
+		}
 		
 		//保存用户与角色关系
 		Map<String, Object> map = new HashMap<>();

@@ -38,8 +38,10 @@ var vm = new Vue({
 		user:{},
 		menuList:{},
 		main:"main.html",
-		password:'',
-		newPassword:'',
+        form:{
+            password:'',
+            newPassword:''
+		},
         navTitle:"欢迎页"
 	},
 	methods: {
@@ -64,12 +66,12 @@ var vm = new Vue({
 				content: jQuery("#passwordLayer"),
 				btn: ['修改','取消'],
 				btn1: function (index) {
-					var data = "password="+vm.password+"&newPassword="+vm.newPassword;
 					$.ajax({
 						type: "POST",
 					    url: baseURL + "sys/user/password",
-					    data: data,
 					    dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(vm.form),
 					    success: function(r){
 							if(r.code == 0){
 								layer.close(index);

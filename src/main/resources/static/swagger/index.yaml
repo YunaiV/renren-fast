@@ -33,20 +33,12 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: username
-          description: 用户名
-          in: query
+        - name: body
+          description: 管理员对象
+          in: body
           type: string
-          required: true
-        - name: password
-          description: 密码
-          in: query
-          type: string
-          required: true
-        - name: captcha
-          description: 验证码
-          in: query
-          type: string
+          schema:
+            $ref: '#/definitions/LoginForm'
           required: true
       responses:
         '200':
@@ -140,15 +132,12 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: password
-          description: 原密码
-          in: query
+        - name: body
+          description: 管理员对象
+          in: body
           type: string
-          required: true
-        - name: newPassword
-          description: 新密码
-          in: query
-          type: string
+          schema:
+            $ref: '#/definitions/PasswordForm'
           required: true
       responses:
         '200':
@@ -1050,7 +1039,27 @@ definitions:
         msg:
           description: 失败原因
           type: string
-
+  LoginForm:
+    type: object
+    properties:
+      username:
+        description: 用户名
+        type: string
+      password:
+        description: 密码
+        type: string
+      captcha:
+        description: 验证码
+        type: string
+  PasswordForm:
+    type: object
+    properties:
+      password:
+        description: 原密码
+        type: string
+      newPassword:
+        description: 新密码
+        type: string
   SysUserEntity:
     type: object
     properties:
