@@ -121,6 +121,9 @@ public class SysUserServiceImpl implements SysUserService {
 	 * 检查角色是否越权
 	 */
 	private void checkRole(SysUserEntity user){
+		if(user.getRoleIdList() == null || user.getRoleIdList().size() == 0){
+			return;
+		}
 		//如果不是超级管理员，则需要判断用户的角色是否自己创建
 		if(user.getCreateUserId() == Constant.SUPER_ADMIN){
 			return ;
@@ -128,7 +131,7 @@ public class SysUserServiceImpl implements SysUserService {
 		
 		//查询用户创建的角色列表
 		List<Long> roleIdList = sysRoleService.queryRoleIdList(user.getCreateUserId());
-		
+
 		//判断是否越权
 		if(!roleIdList.containsAll(user.getRoleIdList())){
 			throw new RRException("新增用户所选角色，不是本人创建");
