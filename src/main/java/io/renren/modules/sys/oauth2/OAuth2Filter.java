@@ -7,6 +7,7 @@ import org.apache.http.HttpStatus;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -37,6 +38,10 @@ public class OAuth2Filter extends AuthenticatingFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if(((HttpServletRequest) request).getMethod().equals(RequestMethod.OPTIONS.name())){
+            return true;
+        }
+
         return false;
     }
 

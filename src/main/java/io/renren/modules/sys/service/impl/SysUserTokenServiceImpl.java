@@ -1,37 +1,21 @@
 package io.renren.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import io.renren.common.utils.R;
 import io.renren.modules.sys.dao.SysUserTokenDao;
 import io.renren.modules.sys.entity.SysUserTokenEntity;
-import io.renren.modules.sys.service.SysUserTokenService;
-import io.renren.common.utils.R;
 import io.renren.modules.sys.oauth2.TokenGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.renren.modules.sys.service.SysUserTokenService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 
 @Service("sysUserTokenService")
-public class SysUserTokenServiceImpl implements SysUserTokenService {
-	@Autowired
-	private SysUserTokenDao sysUserTokenDao;
+public class SysUserTokenServiceImpl extends ServiceImpl<SysUserTokenDao, SysUserTokenEntity> implements SysUserTokenService {
 	//12小时后过期
 	private final static int EXPIRE = 3600 * 12;
 
-	@Override
-	public SysUserTokenEntity queryByUserId(Long userId) {
-		return sysUserTokenDao.queryByUserId(userId);
-	}
-
-	@Override
-	public void save(SysUserTokenEntity token){
-		sysUserTokenDao.save(token);
-	}
-	
-	@Override
-	public void update(SysUserTokenEntity token){
-		sysUserTokenDao.update(token);
-	}
 
 	@Override
 	public R createToken(long userId) {
@@ -44,7 +28,7 @@ public class SysUserTokenServiceImpl implements SysUserTokenService {
 		Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
 
 		//判断是否生成过token
-		SysUserTokenEntity tokenEntity = queryByUserId(userId);
+		SysUserTokenEntity tokenEntity = this.selectById(userId);
 		if(tokenEntity == null){
 			tokenEntity = new SysUserTokenEntity();
 			tokenEntity.setUserId(userId);
@@ -53,14 +37,14 @@ public class SysUserTokenServiceImpl implements SysUserTokenService {
 			tokenEntity.setExpireTime(expireTime);
 
 			//保存token
-			save(tokenEntity);
+			this.insert(tokenEntity);
 		}else{
 			tokenEntity.setToken(token);
 			tokenEntity.setUpdateTime(now);
 			tokenEntity.setExpireTime(expireTime);
 
 			//更新token
-			update(tokenEntity);
+			this.updateById(tokenEntity);
 		}
 
 		R r = R.ok().put("token", token).put("expire", EXPIRE);
@@ -77,6 +61,6 @@ public class SysUserTokenServiceImpl implements SysUserTokenService {
 		SysUserTokenEntity tokenEntity = new SysUserTokenEntity();
 		tokenEntity.setUserId(userId);
 		tokenEntity.setToken(token);
-		update(tokenEntity);
+		this.updateById(tokenEntity);
 	}
 }

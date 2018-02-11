@@ -1,7 +1,8 @@
 package io.renren.modules.sys.service;
 
-import io.renren.modules.sys.entity.SysUserTokenEntity;
+import com.baomidou.mybatisplus.service.IService;
 import io.renren.common.utils.R;
+import io.renren.modules.sys.entity.SysUserTokenEntity;
 
 /**
  * 用户Token
@@ -10,13 +11,7 @@ import io.renren.common.utils.R;
  * @email sunlightcs@gmail.com
  * @date 2017-03-23 15:22:07
  */
-public interface SysUserTokenService {
-
-	SysUserTokenEntity queryByUserId(Long userId);
-
-	void save(SysUserTokenEntity token);
-	
-	void update(SysUserTokenEntity token);
+public interface SysUserTokenService extends IService<SysUserTokenEntity> {
 
 	/**
 	 * 生成token

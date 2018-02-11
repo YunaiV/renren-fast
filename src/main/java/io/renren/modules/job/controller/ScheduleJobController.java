@@ -1,25 +1,38 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.job.controller;
 
+import io.renren.common.annotation.SysLog;
+import io.renren.common.utils.PageUtils;
+import io.renren.common.utils.R;
+import io.renren.common.validator.ValidatorUtils;
 import io.renren.modules.job.entity.ScheduleJobEntity;
 import io.renren.modules.job.service.ScheduleJobService;
-import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.Query;
-import io.renren.common.utils.R;
-import io.renren.common.annotation.SysLog;
-import io.renren.common.validator.ValidatorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * 定时任务
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年11月28日 下午2:16:40
+ *
+ * @author Mark sunlightcs@gmail.com
+ * @since 1.2.0 2016-11-28
  */
 @RestController
 @RequestMapping("/sys/schedule")
@@ -30,26 +43,21 @@ public class ScheduleJobController {
 	/**
 	 * 定时任务列表
 	 */
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	@RequiresPermissions("sys:schedule:list")
 	public R list(@RequestParam Map<String, Object> params){
-		//查询列表数据
-		Query query = new Query(params);
-		List<ScheduleJobEntity> jobList = scheduleJobService.queryList(query);
-		int total = scheduleJobService.queryTotal(query);
-		
-		PageUtils pageUtil = new PageUtils(jobList, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
+		PageUtils page = scheduleJobService.queryPage(params);
+
+		return R.ok().put("page", page);
 	}
 	
 	/**
 	 * 定时任务信息
 	 */
-	@RequestMapping("/info/{jobId}")
+	@GetMapping("/info/{jobId}")
 	@RequiresPermissions("sys:schedule:info")
 	public R info(@PathVariable("jobId") Long jobId){
-		ScheduleJobEntity schedule = scheduleJobService.queryObject(jobId);
+		ScheduleJobEntity schedule = scheduleJobService.selectById(jobId);
 		
 		return R.ok().put("schedule", schedule);
 	}
@@ -58,7 +66,7 @@ public class ScheduleJobController {
 	 * 保存定时任务
 	 */
 	@SysLog("保存定时任务")
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	@RequiresPermissions("sys:schedule:save")
 	public R save(@RequestBody ScheduleJobEntity scheduleJob){
 		ValidatorUtils.validateEntity(scheduleJob);
@@ -72,7 +80,7 @@ public class ScheduleJobController {
 	 * 修改定时任务
 	 */
 	@SysLog("修改定时任务")
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	@RequiresPermissions("sys:schedule:update")
 	public R update(@RequestBody ScheduleJobEntity scheduleJob){
 		ValidatorUtils.validateEntity(scheduleJob);
@@ -86,7 +94,7 @@ public class ScheduleJobController {
 	 * 删除定时任务
 	 */
 	@SysLog("删除定时任务")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
 	@RequiresPermissions("sys:schedule:delete")
 	public R delete(@RequestBody Long[] jobIds){
 		scheduleJobService.deleteBatch(jobIds);
@@ -98,7 +106,7 @@ public class ScheduleJobController {
 	 * 立即执行任务
 	 */
 	@SysLog("立即执行任务")
-	@RequestMapping("/run")
+	@PostMapping("/run")
 	@RequiresPermissions("sys:schedule:run")
 	public R run(@RequestBody Long[] jobIds){
 		scheduleJobService.run(jobIds);
@@ -110,7 +118,7 @@ public class ScheduleJobController {
 	 * 暂停定时任务
 	 */
 	@SysLog("暂停定时任务")
-	@RequestMapping("/pause")
+	@PostMapping("/pause")
 	@RequiresPermissions("sys:schedule:pause")
 	public R pause(@RequestBody Long[] jobIds){
 		scheduleJobService.pause(jobIds);
@@ -122,7 +130,7 @@ public class ScheduleJobController {
 	 * 恢复定时任务
 	 */
 	@SysLog("恢复定时任务")
-	@RequestMapping("/resume")
+	@PostMapping("/resume")
 	@RequiresPermissions("sys:schedule:resume")
 	public R resume(@RequestBody Long[] jobIds){
 		scheduleJobService.resume(jobIds);

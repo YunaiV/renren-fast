@@ -1,7 +1,28 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import io.renren.common.exception.RRException;
+import io.renren.common.utils.PageUtils;
+import io.renren.common.utils.Query;
 import io.renren.modules.sys.dao.SysConfigDao;
 import io.renren.modules.sys.entity.SysConfigEntity;
 import io.renren.modules.sys.redis.SysConfigRedis;
@@ -11,68 +32,64 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 @Service("sysConfigService")
-public class SysConfigServiceImpl implements SysConfigService {
-	@Autowired
-	private SysConfigDao sysConfigDao;
+public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 	@Autowired
 	private SysConfigRedis sysConfigRedis;
+
+	@Override
+	public PageUtils queryPage(Map<String, Object> params) {
+		String key = (String)params.get("key");
+
+		Page<SysConfigEntity> page = this.selectPage(
+				new Query<SysConfigEntity>(params).getPage(),
+				new EntityWrapper<SysConfigEntity>()
+					.like(StringUtils.isNotBlank(key),"key", key)
+					.eq("status", 1)
+		);
+
+		return new PageUtils(page);
+	}
 	
 	@Override
-	@Transactional
 	public void save(SysConfigEntity config) {
-		sysConfigDao.save(config);
+		this.insert(config);
 		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void update(SysConfigEntity config) {
-		sysConfigDao.update(config);
+		this.updateById(config);
 		sysConfigRedis.saveOrUpdate(config);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updateValueByKey(String key, String value) {
-		sysConfigDao.updateValueByKey(key, value);
+		baseMapper.updateValueByKey(key, value);
 		sysConfigRedis.delete(key);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void deleteBatch(Long[] ids) {
 		for(Long id : ids){
-			SysConfigEntity config = queryObject(id);
+			SysConfigEntity config = this.selectById(id);
 			sysConfigRedis.delete(config.getKey());
 		}
 
-		sysConfigDao.deleteBatch(ids);
-	}
-
-	@Override
-	public List<SysConfigEntity> queryList(Map<String, Object> map) {
-		return sysConfigDao.queryList(map);
-	}
-
-	@Override
-	public int queryTotal(Map<String, Object> map) {
-		return sysConfigDao.queryTotal(map);
-	}
-
-	@Override
-	public SysConfigEntity queryObject(Long id) {
-		return sysConfigDao.queryObject(id);
+		this.deleteBatchIds(Arrays.asList(ids));
 	}
 
 	@Override
 	public String getValue(String key) {
 		SysConfigEntity config = sysConfigRedis.get(key);
 		if(config == null){
-			config = sysConfigDao.queryByKey(key);
+			config = baseMapper.queryByKey(key);
 			sysConfigRedis.saveOrUpdate(config);
 		}
 

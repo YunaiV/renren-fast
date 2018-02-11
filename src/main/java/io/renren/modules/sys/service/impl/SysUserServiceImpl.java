@@ -1,7 +1,12 @@
 package io.renren.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.Constant;
+import io.renren.common.utils.PageUtils;
+import io.renren.common.utils.Query;
 import io.renren.modules.sys.dao.SysUserDao;
 import io.renren.modules.sys.entity.SysUserEntity;
 import io.renren.modules.sys.service.SysRoleService;
@@ -15,11 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -30,42 +31,40 @@ import java.util.Map;
  * @date 2016年9月18日 上午9:46:09
  */
 @Service("sysUserService")
-public class SysUserServiceImpl implements SysUserService {
-	@Autowired
-	private SysUserDao sysUserDao;
+public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
 	@Autowired
 	private SysRoleService sysRoleService;
 
 	@Override
+	public PageUtils queryPage(Map<String, Object> params) {
+		String username = (String)params.get("username");
+		Long createUserId = (Long)params.get("createUserId");
+
+		Page<SysUserEntity> page = this.selectPage(
+			new Query<SysUserEntity>(params).getPage(),
+			new EntityWrapper<SysUserEntity>()
+				.like(StringUtils.isNotBlank(username),"username", username)
+				.eq(createUserId != null,"create_user_id", createUserId)
+		);
+
+		return new PageUtils(page);
+	}
+
+	@Override
 	public List<String> queryAllPerms(Long userId) {
-		return sysUserDao.queryAllPerms(userId);
+		return baseMapper.queryAllPerms(userId);
 	}
 
 	@Override
 	public List<Long> queryAllMenuId(Long userId) {
-		return sysUserDao.queryAllMenuId(userId);
+		return baseMapper.queryAllMenuId(userId);
 	}
 
 	@Override
 	public SysUserEntity queryByUserName(String username) {
-		return sysUserDao.queryByUserName(username);
-	}
-	
-	@Override
-	public SysUserEntity queryObject(Long userId) {
-		return sysUserDao.queryObject(userId);
-	}
-
-	@Override
-	public List<SysUserEntity> queryList(Map<String, Object> map){
-		return sysUserDao.queryList(map);
-	}
-	
-	@Override
-	public int queryTotal(Map<String, Object> map) {
-		return sysUserDao.queryTotal(map);
+		return baseMapper.queryByUserName(username);
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class SysUserServiceImpl implements SysUserService {
 		String salt = RandomStringUtils.randomAlphanumeric(20);
 		user.setPassword(new Sha256Hash(user.getPassword(), salt).toHex());
 		user.setSalt(salt);
-		sysUserDao.save(user);
+		this.insert(user);
 		
 		//检查角色是否越权
 		checkRole(user);
@@ -93,7 +92,7 @@ public class SysUserServiceImpl implements SysUserService {
 		}else{
 			user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt()).toHex());
 		}
-		sysUserDao.update(user);
+		this.updateById(user);
 		
 		//检查角色是否越权
 		checkRole(user);
@@ -103,18 +102,16 @@ public class SysUserServiceImpl implements SysUserService {
 	}
 
 	@Override
-	@Transactional
 	public void deleteBatch(Long[] userId) {
-		sysUserDao.deleteBatch(userId);
+		this.deleteBatchIds(Arrays.asList(userId));
 	}
 
 	@Override
-	public int updatePassword(Long userId, String password, String newPassword) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("userId", userId);
-		map.put("password", password);
-		map.put("newPassword", newPassword);
-		return sysUserDao.updatePassword(map);
+	public boolean updatePassword(Long userId, String password, String newPassword) {
+		SysUserEntity userEntity = new SysUserEntity();
+		userEntity.setPassword(newPassword);
+		return this.update(userEntity,
+				new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
 	}
 	
 	/**

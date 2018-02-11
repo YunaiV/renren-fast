@@ -1,23 +1,27 @@
 package io.renren.modules.sys.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import io.renren.common.exception.RRException;
+import io.renren.common.utils.Constant;
+import io.renren.common.utils.PageUtils;
+import io.renren.common.utils.Query;
 import io.renren.modules.sys.dao.SysRoleDao;
 import io.renren.modules.sys.entity.SysRoleEntity;
 import io.renren.modules.sys.service.SysRoleMenuService;
 import io.renren.modules.sys.service.SysRoleService;
 import io.renren.modules.sys.service.SysUserRoleService;
 import io.renren.modules.sys.service.SysUserService;
-import io.renren.common.utils.Constant;
-import io.renren.common.exception.RRException;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 角色
@@ -27,65 +31,71 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2016年9月18日 上午9:45:12
  */
 @Service("sysRoleService")
-public class SysRoleServiceImpl implements SysRoleService {
-	@Autowired
-	private SysRoleDao sysRoleDao;
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
 	@Autowired
 	private SysRoleMenuService sysRoleMenuService;
 	@Autowired
-	private SysUserRoleService sysUserRoleService;
-	@Autowired
 	private SysUserService sysUserService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
 	@Override
-	public SysRoleEntity queryObject(Long roleId) {
-		return sysRoleDao.queryObject(roleId);
+	public PageUtils queryPage(Map<String, Object> params) {
+		String roleName = (String)params.get("roleName");
+		Long createUserId = (Long)params.get("createUserId");
+
+		Page<SysRoleEntity> page = this.selectPage(
+			new Query<SysRoleEntity>(params).getPage(),
+			new EntityWrapper<SysRoleEntity>()
+				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
+				.eq(createUserId != null,"create_user_id", createUserId)
+		);
+
+		return new PageUtils(page);
 	}
 
-	@Override
-	public List<SysRoleEntity> queryList(Map<String, Object> map) {
-		return sysRoleDao.queryList(map);
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(SysRoleEntity role) {
+        role.setCreateTime(new Date());
+        this.insert(role);
 
-	@Override
-	public int queryTotal(Map<String, Object> map) {
-		return sysRoleDao.queryTotal(map);
-	}
+        //检查权限是否越权
+        checkPrems(role);
 
-	@Override
-	@Transactional
-	public void save(SysRoleEntity role) {
-		role.setCreateTime(new Date());
-		sysRoleDao.save(role);
-		
-		//检查权限是否越权
-		checkPrems(role);
-		
-		//保存角色与菜单关系
-		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
-	}
+        //保存角色与菜单关系
+        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
+    }
 
-	@Override
-	@Transactional
-	public void update(SysRoleEntity role) {
-		sysRoleDao.update(role);
-		
-		//检查权限是否越权
-		checkPrems(role);
-		
-		//更新角色与菜单关系
-		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysRoleEntity role) {
+        this.updateById(role);
 
-	@Override
-	@Transactional
-	public void deleteBatch(Long[] roleIds) {
-		sysRoleDao.deleteBatch(roleIds);
-	}
-	
-	@Override
+        //检查权限是否越权
+        checkPrems(role);
+
+        //更新角色与菜单关系
+        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBatch(Long[] roleIds) {
+        //删除角色
+        this.deleteBatchIds(Arrays.asList(roleIds));
+
+        //删除角色与菜单关联
+        sysRoleMenuService.deleteBatch(roleIds);
+
+        //删除角色与用户关联
+        sysUserRoleService.deleteBatch(roleIds);
+    }
+
+
+    @Override
 	public List<Long> queryRoleIdList(Long createUserId) {
-		return sysRoleDao.queryRoleIdList(createUserId);
+		return baseMapper.queryRoleIdList(createUserId);
 	}
 
 	/**

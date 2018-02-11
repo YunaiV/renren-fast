@@ -1,34 +1,37 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.job.service;
 
+import com.baomidou.mybatisplus.service.IService;
+import io.renren.common.utils.PageUtils;
 import io.renren.modules.job.entity.ScheduleJobEntity;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * 定时任务
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年11月28日 上午9:55:32
+ *
+ * @author Mark sunlightcs@gmail.com
+ * @since 1.2.0 2016-11-28
  */
-public interface ScheduleJobService {
+public interface ScheduleJobService extends IService<ScheduleJobEntity> {
 
-	/**
-	 * 根据ID，查询定时任务
-	 */
-	ScheduleJobEntity queryObject(Long jobId);
-	
-	/**
-	 * 查询定时任务列表
-	 */
-	List<ScheduleJobEntity> queryList(Map<String, Object> map);
-	
-	/**
-	 * 查询总数
-	 */
-	int queryTotal(Map<String, Object> map);
-	
+	PageUtils queryPage(Map<String, Object> params);
+
 	/**
 	 * 保存定时任务
 	 */

@@ -1,8 +1,8 @@
 package io.renren;
 
 
-import io.renren.datasources.DataSourceTestService;
-import io.renren.modules.app.entity.UserEntity;
+import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.service.DataSourceTestService;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,15 +20,15 @@ public class DynamicDataSourceTest {
     @Test
     public void test(){
         //数据源1
-        UserEntity user = dataSourceTestService.queryObject(1L);
-        System.out.println(ToStringBuilder.reflectionToString(user));
+        SysUserEntity user1 = dataSourceTestService.queryUser(1L);
+        System.out.println(ToStringBuilder.reflectionToString(user1));
 
         //数据源2
-        UserEntity user2 = dataSourceTestService.queryObject2(1L);
+        SysUserEntity user2 = dataSourceTestService.queryUser2(1L);
         System.out.println(ToStringBuilder.reflectionToString(user2));
 
         //数据源1
-        UserEntity user3 = dataSourceTestService.queryObject(1L);
+        SysUserEntity user3 = dataSourceTestService.queryUser(1L);
         System.out.println(ToStringBuilder.reflectionToString(user3));
     }
 

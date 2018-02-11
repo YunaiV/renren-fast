@@ -3,7 +3,6 @@ package io.renren.modules.sys.controller;
 import io.renren.common.annotation.SysLog;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.Query;
 import io.renren.common.utils.R;
 import io.renren.common.validator.Assert;
 import io.renren.common.validator.ValidatorUtils;
@@ -36,32 +35,27 @@ public class SysUserController extends AbstractController {
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
-	
+
+
 	/**
 	 * 所有用户列表
 	 */
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	@RequiresPermissions("sys:user:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//只有超级管理员，才能查看所有管理员列表
 		if(getUserId() != Constant.SUPER_ADMIN){
 			params.put("createUserId", getUserId());
 		}
-		
-		//查询列表数据
-		Query query = new Query(params);
-		List<SysUserEntity> userList = sysUserService.queryList(query);
-		int total = sysUserService.queryTotal(query);
-		
-		PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
+		PageUtils page = sysUserService.queryPage(params);
+
+		return R.ok().put("page", page);
 	}
 	
 	/**
 	 * 获取登录的用户信息
 	 */
-	@RequestMapping("/info")
+	@GetMapping("/info")
 	public R info(){
 		return R.ok().put("user", getUser());
 	}
@@ -70,7 +64,7 @@ public class SysUserController extends AbstractController {
 	 * 修改登录用户密码
 	 */
 	@SysLog("修改密码")
-	@RequestMapping("/password")
+	@PostMapping("/password")
 	public R password(@RequestBody PasswordForm form){
 		Assert.isBlank(form.getNewPassword(), "新密码不为能空");
 		
@@ -80,8 +74,8 @@ public class SysUserController extends AbstractController {
 		String newPassword = new Sha256Hash(form.getNewPassword(), getUser().getSalt()).toHex();
 				
 		//更新密码
-		int count = sysUserService.updatePassword(getUserId(), password, newPassword);
-		if(count == 0){
+		boolean flag = sysUserService.updatePassword(getUserId(), password, newPassword);
+		if(!flag){
 			return R.error("原密码不正确");
 		}
 		
@@ -91,10 +85,10 @@ public class SysUserController extends AbstractController {
 	/**
 	 * 用户信息
 	 */
-	@RequestMapping("/info/{userId}")
+	@GetMapping("/info/{userId}")
 	@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
-		SysUserEntity user = sysUserService.queryObject(userId);
+		SysUserEntity user = sysUserService.selectById(userId);
 		
 		//获取用户所属的角色列表
 		List<Long> roleIdList = sysUserRoleService.queryRoleIdList(userId);
@@ -107,7 +101,7 @@ public class SysUserController extends AbstractController {
 	 * 保存用户
 	 */
 	@SysLog("保存用户")
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
@@ -122,11 +116,11 @@ public class SysUserController extends AbstractController {
 	 * 修改用户
 	 */
 	@SysLog("修改用户")
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	@RequiresPermissions("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
-		
+
 		user.setCreateUserId(getUserId());
 		sysUserService.update(user);
 		
@@ -137,7 +131,7 @@ public class SysUserController extends AbstractController {
 	 * 删除用户
 	 */
 	@SysLog("删除用户")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
 	@RequiresPermissions("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){

@@ -1,17 +1,31 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.job.utils;
 
-import com.google.gson.Gson;
-import io.renren.modules.job.entity.ScheduleJobEntity;
-import io.renren.common.utils.Constant.ScheduleStatus;
 import io.renren.common.exception.RRException;
+import io.renren.common.utils.Constant;
+import io.renren.modules.job.entity.ScheduleJobEntity;
 import org.quartz.*;
 
 /**
  * 定时任务工具类
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年11月30日 下午12:44:59
+ *
+ * @author Mark sunlightcs@gmail.com
+ * @since 1.2.0 2016-11-28
  */
 public class ScheduleUtils {
     private final static String JOB_NAME = "TASK_";
@@ -19,14 +33,14 @@ public class ScheduleUtils {
     /**
      * 获取触发器key
      */
-    private static TriggerKey getTriggerKey(Long jobId) {
+    public static TriggerKey getTriggerKey(Long jobId) {
         return TriggerKey.triggerKey(JOB_NAME + jobId);
     }
     
     /**
      * 获取jobKey
      */
-    private static JobKey getJobKey(Long jobId) {
+    public static JobKey getJobKey(Long jobId) {
         return JobKey.jobKey(JOB_NAME + jobId);
     }
 
@@ -37,7 +51,7 @@ public class ScheduleUtils {
         try {
             return (CronTrigger) scheduler.getTrigger(getTriggerKey(jobId));
         } catch (SchedulerException e) {
-            throw new RRException("getCronTrigger异常，请检查qrtz开头的表，是否有脏数据", e);
+            throw new RRException("获取定时任务CronTrigger出现异常", e);
         }
     }
 
@@ -46,24 +60,23 @@ public class ScheduleUtils {
      */
     public static void createScheduleJob(Scheduler scheduler, ScheduleJobEntity scheduleJob) {
         try {
-        	//构建job
+        	//构建job信息
             JobDetail jobDetail = JobBuilder.newJob(ScheduleJob.class).withIdentity(getJobKey(scheduleJob.getJobId())).build();
 
-            //构建cron
+            //表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression())
             		.withMisfireHandlingInstructionDoNothing();
 
-            //根据cron，构建一个CronTrigger
-            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(scheduleJob.getJobId())).
-                    withSchedule(scheduleBuilder).build();
+            //按新的cronExpression表达式构建一个新的trigger
+            CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(scheduleJob.getJobId())).withSchedule(scheduleBuilder).build();
 
             //放入参数，运行时的方法可以获取
-            jobDetail.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, new Gson().toJson(scheduleJob));
+            jobDetail.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
 
             scheduler.scheduleJob(jobDetail, trigger);
             
             //暂停任务
-            if(scheduleJob.getStatus() == ScheduleStatus.PAUSE.getValue()){
+            if(scheduleJob.getStatus() == Constant.ScheduleStatus.PAUSE.getValue()){
             	pauseJob(scheduler, scheduleJob.getJobId());
             }
         } catch (SchedulerException e) {
@@ -88,12 +101,12 @@ public class ScheduleUtils {
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
             
             //参数
-            trigger.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, new Gson().toJson(scheduleJob));
+            trigger.getJobDataMap().put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
             
             scheduler.rescheduleJob(triggerKey, trigger);
             
             //暂停任务
-            if(scheduleJob.getStatus() == ScheduleStatus.PAUSE.getValue()){
+            if(scheduleJob.getStatus() == Constant.ScheduleStatus.PAUSE.getValue()){
             	pauseJob(scheduler, scheduleJob.getJobId());
             }
             
@@ -109,7 +122,7 @@ public class ScheduleUtils {
         try {
         	//参数
         	JobDataMap dataMap = new JobDataMap();
-        	dataMap.put(ScheduleJobEntity.JOB_PARAM_KEY, new Gson().toJson(scheduleJob));
+        	dataMap.put(ScheduleJobEntity.JOB_PARAM_KEY, scheduleJob);
         	
             scheduler.triggerJob(getJobKey(scheduleJob.getJobId()), dataMap);
         } catch (SchedulerException e) {

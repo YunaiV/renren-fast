@@ -1,5 +1,8 @@
 package io.renren.modules.sys.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.Email;
@@ -16,12 +19,14 @@ import java.util.List;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:28:55
  */
+@TableName("sys_user")
 public class SysUserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * 用户ID
 	 */
+	@TableId
 	private Long userId;
 
 	/**
@@ -61,6 +66,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 角色ID列表
 	 */
+	@TableField(exist=false)
 	private List<Long> roleIdList;
 	
 	/**

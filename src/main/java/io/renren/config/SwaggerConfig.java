@@ -39,7 +39,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
             .title("人人开源")
             .description("renren-fast文档")
             .termsOfServiceUrl("http://www.renren.io")
-            .version("1.3")
+            .version("2.0")
             .build();
     }
 

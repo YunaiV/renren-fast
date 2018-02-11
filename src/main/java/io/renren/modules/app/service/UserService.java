@@ -1,10 +1,9 @@
 package io.renren.modules.app.service;
 
 
+import com.baomidou.mybatisplus.service.IService;
 import io.renren.modules.app.entity.UserEntity;
-
-import java.util.List;
-import java.util.Map;
+import io.renren.modules.app.form.LoginForm;
 
 /**
  * 用户
@@ -13,29 +12,14 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2017-03-23 15:22:06
  */
-public interface UserService {
-
-	UserEntity queryObject(Long userId);
-	
-	List<UserEntity> queryList(Map<String, Object> map);
-	
-	int queryTotal(Map<String, Object> map);
-	
-	void save(String mobile, String password);
-	
-	void update(UserEntity user);
-	
-	void delete(Long userId);
-	
-	void deleteBatch(Long[] userIds);
+public interface UserService extends IService<UserEntity> {
 
 	UserEntity queryByMobile(String mobile);
 
 	/**
 	 * 用户登录
-	 * @param mobile    手机号
-	 * @param password  密码
-	 * @return          返回用户ID
+	 * @param form    登录表单
+	 * @return        返回用户ID
 	 */
-	long login(String mobile, String password);
+	long login(LoginForm form);
 }

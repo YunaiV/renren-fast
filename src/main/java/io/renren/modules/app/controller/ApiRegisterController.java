@@ -2,14 +2,20 @@ package io.renren.modules.app.controller;
 
 
 import io.renren.common.utils.R;
-import io.renren.common.validator.Assert;
+import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.app.entity.UserEntity;
+import io.renren.modules.app.form.RegisterForm;
 import io.renren.modules.app.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
  * 注册
@@ -26,11 +32,16 @@ public class ApiRegisterController {
 
     @PostMapping("register")
     @ApiOperation("注册")
-    public R register(String mobile, String password){
-        Assert.isBlank(mobile, "手机号不能为空");
-        Assert.isBlank(password, "密码不能为空");
+    public R register(@RequestBody RegisterForm form){
+        //表单校验
+        ValidatorUtils.validateEntity(form);
 
-        userService.save(mobile, password);
+        UserEntity user = new UserEntity();
+        user.setMobile(form.getMobile());
+        user.setUsername(form.getMobile());
+        user.setPassword(DigestUtils.sha256Hex(form.getPassword()));
+        user.setCreateTime(new Date());
+        userService.insert(user);
 
         return R.ok();
     }

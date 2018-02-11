@@ -1,9 +1,26 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.sys.service;
 
+
+import com.baomidou.mybatisplus.service.IService;
 import io.renren.modules.sys.entity.SysMenuEntity;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -13,8 +30,8 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:42:16
  */
-public interface SysMenuService {
-	
+public interface SysMenuService extends IService<SysMenuEntity> {
+
 	/**
 	 * 根据父菜单，查询子菜单
 	 * @param parentId 父菜单ID
@@ -37,39 +54,9 @@ public interface SysMenuService {
 	 * 获取用户菜单列表
 	 */
 	List<SysMenuEntity> getUserMenuList(Long userId);
-	
-	/**
-	 * 查询菜单
-	 */
-	SysMenuEntity queryObject(Long menuId);
-	
-	/**
-	 * 查询菜单列表
-	 */
-	List<SysMenuEntity> queryList(Map<String, Object> map);
-	
-	/**
-	 * 查询总数
-	 */
-	int queryTotal(Map<String, Object> map);
-	
-	/**
-	 * 保存菜单
-	 */
-	void save(SysMenuEntity menu);
-	
-	/**
-	 * 修改
-	 */
-	void update(SysMenuEntity menu);
-	
+
 	/**
 	 * 删除
 	 */
-	void deleteBatch(Long[] menuIds);
-	
-	/**
-	 * 查询用户的权限列表
-	 */
-	List<SysMenuEntity> queryUserList(Long userId);
+	void delete(Long menuId);
 }

@@ -1,21 +1,36 @@
+/**
+ * Copyright 2018 人人开源 http://www.renren.io
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package io.renren.modules.sys.controller;
 
+
 import io.renren.common.annotation.SysLog;
-import io.renren.modules.sys.entity.SysConfigEntity;
-import io.renren.modules.sys.service.SysConfigService;
 import io.renren.common.utils.PageUtils;
-import io.renren.common.utils.Query;
 import io.renren.common.utils.R;
 import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.sys.entity.SysConfigEntity;
+import io.renren.modules.sys.service.SysConfigService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * 系统参数信息
+ * 系统配置信息
  * 
  * @author chenshun
  * @email sunlightcs@gmail.com
@@ -30,27 +45,22 @@ public class SysConfigController extends AbstractController {
 	/**
 	 * 所有配置列表
 	 */
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	@RequiresPermissions("sys:config:list")
 	public R list(@RequestParam Map<String, Object> params){
-		//查询列表数据
-		Query query = new Query(params);
-		List<SysConfigEntity> configList = sysConfigService.queryList(query);
-		int total = sysConfigService.queryTotal(query);
-		
-		PageUtils pageUtil = new PageUtils(configList, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
+		PageUtils page = sysConfigService.queryPage(params);
+
+		return R.ok().put("page", page);
 	}
 	
 	
 	/**
 	 * 配置信息
 	 */
-	@RequestMapping("/info/{id}")
+	@GetMapping("/info/{id}")
 	@RequiresPermissions("sys:config:info")
 	public R info(@PathVariable("id") Long id){
-		SysConfigEntity config = sysConfigService.queryObject(id);
+		SysConfigEntity config = sysConfigService.selectById(id);
 		
 		return R.ok().put("config", config);
 	}
@@ -59,7 +69,7 @@ public class SysConfigController extends AbstractController {
 	 * 保存配置
 	 */
 	@SysLog("保存配置")
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	@RequiresPermissions("sys:config:save")
 	public R save(@RequestBody SysConfigEntity config){
 		ValidatorUtils.validateEntity(config);
@@ -73,7 +83,7 @@ public class SysConfigController extends AbstractController {
 	 * 修改配置
 	 */
 	@SysLog("修改配置")
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	@RequiresPermissions("sys:config:update")
 	public R update(@RequestBody SysConfigEntity config){
 		ValidatorUtils.validateEntity(config);
@@ -87,7 +97,7 @@ public class SysConfigController extends AbstractController {
 	 * 删除配置
 	 */
 	@SysLog("删除配置")
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
 	@RequiresPermissions("sys:config:delete")
 	public R delete(@RequestBody Long[] ids){
 		sysConfigService.deleteBatch(ids);

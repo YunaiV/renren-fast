@@ -12,7 +12,7 @@
     </springProfile>
 
     <!-- 生产环境 -->
-    <springProfile name="pro">
+    <springProfile name="prod">
         <logger name="org.springframework.web" level="ERROR"/>
         <logger name="org.springboot.sample" level="ERROR" />
         <logger name="io.renren" level="ERROR" />

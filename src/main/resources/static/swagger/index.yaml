@@ -25,6 +25,12 @@ paths:
       summary: 获取验证码
       produces:
         - application/octet-stream
+      parameters:
+        - name: uuid
+          description: UUID
+          in: query
+          type: string
+          required: true
   /sys/login:
     post:
       tags:
@@ -473,7 +479,7 @@ paths:
         '200':
           schema:
             $ref: '#/definitions/R'
-  /sys/menu/delete:
+  /sys/menu/delete/{menuId}:
     post:
       tags:
         - 菜单管理
@@ -481,14 +487,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: body
-          description: 菜单ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
+        - name: menuId
+          description: 菜单ID
+          in: path
+          type: integer
           required: true
       responses:
         '200':
@@ -1050,6 +1052,9 @@ definitions:
         type: string
       captcha:
         description: 验证码
+        type: string
+      uuid:
+        description: UUID
         type: string
   PasswordForm:
     type: object

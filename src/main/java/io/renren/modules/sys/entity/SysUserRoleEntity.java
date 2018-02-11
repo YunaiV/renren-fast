@@ -1,6 +1,9 @@
 package io.renren.modules.sys.entity;
 
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.io.Serializable;
 
 /**
@@ -10,9 +13,10 @@ import java.io.Serializable;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:28:39
  */
+@TableName("sys_user_role")
 public class SysUserRoleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+	@TableId
 	private Long id;
 
 	/**

@@ -2,13 +2,15 @@ package io.renren.modules.app.controller;
 
 
 import io.renren.common.utils.R;
-import io.renren.common.validator.Assert;
+import io.renren.common.validator.ValidatorUtils;
+import io.renren.modules.app.form.LoginForm;
 import io.renren.modules.app.service.UserService;
 import io.renren.modules.app.utils.JwtUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,12 +38,12 @@ public class ApiLoginController {
      */
     @PostMapping("login")
     @ApiOperation("登录")
-    public R login(String mobile, String password){
-        Assert.isBlank(mobile, "手机号不能为空");
-        Assert.isBlank(password, "密码不能为空");
+    public R login(@RequestBody LoginForm form){
+        //表单校验
+        ValidatorUtils.validateEntity(form);
 
         //用户登录
-        long userId = userService.login(mobile, password);
+        long userId = userService.login(form);
 
         //生成token
         String token = jwtUtils.generateToken(userId);

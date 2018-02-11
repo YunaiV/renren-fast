@@ -1,19 +1,17 @@
 package io.renren.modules.sys.controller;
 
-import com.google.code.kaptcha.Constants;
-import com.google.code.kaptcha.Producer;
 import io.renren.common.utils.R;
-import io.renren.common.utils.ShiroUtils;
 import io.renren.modules.sys.entity.SysUserEntity;
-import io.renren.modules.sys.form.LoginForm;
+import io.renren.modules.sys.form.SysLoginForm;
+import io.renren.modules.sys.service.SysCaptchaService;
 import io.renren.modules.sys.service.SysUserService;
 import io.renren.modules.sys.service.SysUserTokenService;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -34,26 +32,22 @@ import java.util.Map;
 @RestController
 public class SysLoginController extends AbstractController {
 	@Autowired
-	private Producer producer;
-	@Autowired
 	private SysUserService sysUserService;
 	@Autowired
 	private SysUserTokenService sysUserTokenService;
+	@Autowired
+	private SysCaptchaService sysCaptchaService;
 
 	/**
 	 * 验证码
 	 */
-	@RequestMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response)throws ServletException, IOException {
+	@GetMapping("captcha.jpg")
+	public void captcha(HttpServletResponse response, String uuid)throws ServletException, IOException {
 		response.setHeader("Cache-Control", "no-store, no-cache");
 		response.setContentType("image/jpeg");
 
-		//生成文字验证码
-		String text = producer.createText();
-		//生成图片验证码
-		BufferedImage image = producer.createImage(text);
-		//保存到shiro session
-		ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
+		//获取图片验证码
+		BufferedImage image = sysCaptchaService.getCaptcha(uuid);
 
 		ServletOutputStream out = response.getOutputStream();
 		ImageIO.write(image, "jpg", out);
@@ -63,14 +57,12 @@ public class SysLoginController extends AbstractController {
 	/**
 	 * 登录
 	 */
-	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	public Map<String, Object> login(@RequestBody LoginForm form)throws IOException {
-		//本项目已实现，前后端完全分离，但页面还是跟项目放在一起了，所以还是会依赖session
-		//如果想把页面单独放到nginx里，实现前后端完全分离，则需要把验证码注释掉(因为不再依赖session了)
-//		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-//		if(!captcha.equalsIgnoreCase(kaptcha)){
-//			return R.error("验证码不正确");
-//		}
+	@PostMapping("/sys/login")
+	public Map<String, Object> login(@RequestBody SysLoginForm form)throws IOException {
+		boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
+		if(!captcha){
+			return R.error("验证码不正确");
+		}
 
 		//用户信息
 		SysUserEntity user = sysUserService.queryByUserName(form.getUsername());
@@ -94,7 +86,7 @@ public class SysLoginController extends AbstractController {
 	/**
 	 * 退出
 	 */
-	@RequestMapping(value = "/sys/logout", method = RequestMethod.POST)
+	@PostMapping("/sys/logout")
 	public R logout() {
 		sysUserTokenService.logout(getUserId());
 		return R.ok();
