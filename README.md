@@ -95,15 +95,15 @@ renren-fast
 ![输入图片说明](http://cdn.renren.io/img/6e8d7575fb8240d49b949dc0f02547bc "在这里输入图片标题")
 <br> <br> <br> 
 
-**演示效果图：**
-<br>
-Element UI主题：
+
+**Element UI主题：**
 ![输入图片说明](https://gitee.com/uploads/images/2018/0307/155938_28ed0673_63154.png "在这里输入图片标题")
 ![输入图片说明](https://gitee.com/uploads/images/2018/0307/155956_3f5f4f72_63154.png "在这里输入图片标题")
 ![输入图片说明](https://gitee.com/uploads/images/2018/0307/160033_cff15308_63154.png "在这里输入图片标题")
 
 <br>
-AdminLTE主题：
+
+**AdminLTE主题：**
 ![输入图片说明](http://cdn.renren.io/img/4f15a5513e4e4a00a07294e87c548982 "在这里输入图片标题")
 ![输入图片说明](http://cdn.renren.io/img/9b0c60dfe7ee48fb87bb933e31ebf36f "在这里输入图片标题")
 ![输入图片说明](http://cdn.renren.io/img/f59b6f61c36f49e1851a5bf3e91a1e5b "在这里输入图片标题")
