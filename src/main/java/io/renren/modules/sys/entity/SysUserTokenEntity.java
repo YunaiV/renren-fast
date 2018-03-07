@@ -2,6 +2,7 @@ package io.renren.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class SysUserTokenEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//用户ID
-	@TableId
+	@TableId(type = IdType.INPUT)
 	private Long userId;
 	//token
 	private String token;

@@ -1,8 +1,16 @@
 **项目说明** 
-- renren-fast是一个轻量级的Java快速开发平台，能快速开发项目并交付【接私活利器】
+- renren-fast是一个轻量级的，前后端分离的Java快速开发平台，能快速开发项目并交付【接私活利器】
 <br> 
+<br>
  
-
+ **项目主题** 
+ ```
+ 本项目是前后端分离的，提供了两套主题，只需部署到nginx里即可。
+```
+ - Element UI主题【官方推荐】：https://github.com/daxiongYang/renren-fast-vue
+ - AdminLTE主题：https://gitee.com/renrenio/renren-fast-adminlte
+ <br> 
+ <br> 
 
 **具有如下特点** 
 - 友好的代码结构及注释，便于阅读及二次开发
@@ -21,7 +29,7 @@
 **项目结构** 
 ```
 renren-fast
-├─doc  项目SQL语句
+├─db  项目SQL语句
 │
 ├─common 公共模块
 │  ├─aspect 系统日志
@@ -32,7 +40,7 @@ renren-fast
 ├─config 配置信息
 │ 
 ├─modules 功能模块
-│  ├─api API接口模块(APP调用)
+│  ├─app API接口模块(APP调用)
 │  ├─job 定时任务模块
 │  ├─oss 文件服务模块
 │  └─sys 权限模块
@@ -41,17 +49,15 @@ renren-fast
 │  
 ├──resources 
 │  ├─mapper SQL对应的XML文件
-│  ├─static 第三方库、插件等静态资源
-│  └─views  项目静态页面
+│  └─static 静态资源
 
 ```
 <br> 
 
 **如何交流、反馈、参与贡献？** 
-- 开发文档：http://www.renren.io/open/renren-fast/
-- Git仓库：http://git.oschina.net/babaio/renren-fast
-- 其他项目：http://www.renren.io/open/
-- [编程入门教程](http://www.renren.io)：http://www.renren.io   
+- 开发文档：http://www.renren.io/?s=index/Guide
+- Git仓库：https://gitee.com/renrenio/renren-fast
+- [人人开源](http://www.renren.io)：http://www.renren.io   
 - 官方QQ群：324780204、145799952
 - 如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持
 <br> 
@@ -72,7 +78,7 @@ renren-fast
  **本地部署**
 - 通过git下载源码
 - 创建数据库renren_fast，数据库编码为UTF-8
-- 执行doc/db.sql文件，初始化数据
+- 执行db/mysql.sql文件，初始化数据
 - 修改application-dev.yml，更新MySQL账号和密码
 - Eclipse、IDEA运行RenrenApplication.java，则可启动项目
 - 项目访问路径：http://localhost:8080/renren-fast
@@ -81,7 +87,7 @@ renren-fast
 
 
  **项目演示**
-- 演示地址：http://demo.open.renren.io/renren-fast
+- 演示地址：http://fast.demo.renren.io
 - 账号密码：admin/admin
 <br> 
 
