@@ -54,6 +54,7 @@ public class ScheduleConfig {
 
         prop.put("org.quartz.jobStore.misfireThreshold", "12000");
         prop.put("org.quartz.jobStore.tablePrefix", "QRTZ_");
+        prop.put("org.quartz.jobStore.selectWithLockSQL", "SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?");
         factory.setQuartzProperties(prop);
 
         factory.setSchedulerName("RenrenScheduler");
