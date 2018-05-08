@@ -3,7 +3,6 @@ package io.renren.modules.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
 import org.hibernate.validator.constraints.Email;
@@ -124,7 +123,6 @@ public class SysUserEntity implements Serializable {
 	 * 获取：密码
 	 * @return String
 	 */
-	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -209,7 +207,6 @@ public class SysUserEntity implements Serializable {
 		this.createUserId = createUserId;
 	}
 
-	@JsonIgnore
 	public String getSalt() {
 		return salt;
 	}
