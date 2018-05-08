@@ -1,7 +1,10 @@
--- 只提供了Quartz相关SQL，其他表结构，需要自行转换
 
 
 
+
+
+
+--  quartz自带表结构
 drop table qrtz_fired_triggers;
 DROP TABLE QRTZ_PAUSED_TRIGGER_GRPS;
 DROP TABLE QRTZ_SCHEDULER_STATE;

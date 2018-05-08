@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * 异常处理器
@@ -29,6 +30,12 @@ public class RRExceptionHandler {
 		r.put("msg", e.getMessage());
 
 		return r;
+	}
+
+	@ExceptionHandler(NoHandlerFoundException.class)
+	public R handlerNoFoundException(Exception e) {
+		logger.error(e.getMessage(), e);
+		return R.error(404, "路径不存在，请检查路径是否正确");
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)

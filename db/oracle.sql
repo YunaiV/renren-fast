@@ -1,8 +1,11 @@
--- 只提供了Quartz相关SQL，其他表结构，需要自行转换
 
 
 
 
+
+
+
+--  quartz自带表结构
 delete from qrtz_fired_triggers;
 delete from qrtz_simple_triggers;
 delete from qrtz_simprop_triggers;

@@ -18,7 +18,8 @@ package io.renren.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * 系统配置信息
@@ -32,29 +33,34 @@ public class SysConfigEntity {
 	@TableId
 	private Long id;
 	@NotBlank(message="参数名不能为空")
-	private String key;
+	private String paramKey;
 	@NotBlank(message="参数值不能为空")
-	private String value; 
+	private String paramValue;
 	private String remark;
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getKey() {
-		return key;
+
+	public String getParamKey() {
+		return paramKey;
 	}
-	public void setKey(String key) {
-		this.key = key;
+
+	public void setParamKey(String paramKey) {
+		this.paramKey = paramKey;
 	}
-	public String getValue() {
-		return value;
+
+	public String getParamValue() {
+		return paramValue;
 	}
-	public void setValue(String value) {
-		this.value = value;
+
+	public void setParamValue(String paramValue) {
+		this.paramValue = paramValue;
 	}
+
 	public String getRemark() {
 		return remark;
 	}
