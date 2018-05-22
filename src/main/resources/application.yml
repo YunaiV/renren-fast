@@ -9,6 +9,7 @@ server:
     servlet:
       context-path: /renren-fast
 
+
 spring:
     # 环境 dev|test|prod
     profiles:
@@ -17,12 +18,11 @@ spring:
     jackson:
         time-zone: GMT+8
         date-format: yyyy-MM-dd HH:mm:ss
-    http:
-        multipart:
-          servlet:
-            max-file-size: 100MB
-            max-request-size: 100MB
-            enabled: true
+    servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
+        enabled: true
     redis:
         open: false  # 是否开启redis缓存  true开启   false关闭
         database: 0
@@ -38,6 +38,7 @@ spring:
               min-idle: 5       # 连接池中的最小空闲连接
     mvc:
         throw-exception-if-no-handler-found: true
+        static-path-pattern: /static/**
     resources:
         add-mappings: false
 
