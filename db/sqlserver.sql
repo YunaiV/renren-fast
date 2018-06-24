@@ -28,7 +28,7 @@ CREATE TABLE sys_user (
 
 -- 系统用户Token
 CREATE TABLE sys_user_token (
-  user_id bigint NOT NULL IDENTITY(1,1),
+  user_id bigint NOT NULL,
   token varchar(100) NOT NULL,
   expire_time datetime,
   update_time datetime,

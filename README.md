@@ -62,7 +62,7 @@ renren-fast
 **技术选型：** 
 - 核心框架：Spring Boot 2.0
 - 安全框架：Apache Shiro 1.4
-- 视图框架：Spring MVC 4.3
+- 视图框架：Spring MVC 5.0
 - 持久层框架：MyBatis 3.3
 - 定时器：Quartz 2.3
 - 数据库连接池：Druid 1.0
@@ -77,7 +77,6 @@ renren-fast
 - 执行db/mysql.sql文件，初始化数据
 - 修改application-dev.yml，更新MySQL账号和密码
 - Eclipse、IDEA运行RenrenApplication.java，则可启动项目
-- 项目后端地址：http://localhost:8080/renren-fast
 - Swagger路径：http://localhost:8080/renren-fast/swagger/index.html
 
 <br> 

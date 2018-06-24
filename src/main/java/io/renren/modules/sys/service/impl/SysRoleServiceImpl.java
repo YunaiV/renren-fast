@@ -70,7 +70,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysRoleEntity role) {
-        this.updateAllColumnById(role);
+        this.updateById(role);
 
         //检查权限是否越权
         checkPrems(role);
