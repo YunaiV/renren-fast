@@ -1,7 +1,7 @@
 **项目说明** 
 - renren-fast是一个轻量级的，前后端分离的Java快速开发平台，能快速开发项目并交付【接私活利器】
 - 支持MySQL、Oracle、SQL Server、PostgreSQL等主流数据库
-- 前端地址：https://github.com/daxiongYang/renren-fast-vue
+- 前端地址：https://gitee.com/renrenio/renren-fast-vue
 <br> 
 <br>
  
@@ -83,8 +83,8 @@ renren-fast
 
  **前端部署**
  - 本项目是前后端分离的，还需要部署前端，才能运行起来
- - 前端下载地址：https://github.com/daxiongYang/renren-fast-vue
- - 前端部署文档：https://github.com/daxiongYang/renren-fast-vue/wiki/Getting-started
+ - 前端下载地址：https://gitee.com/renrenio/renren-fast-vue
+ - 前端部署文档：https://gitee.com/renrenio/renren-fast-vue/wikis/Home
  - 前端部署完毕，就可以访问项目了，账号：admin，密码：admin
  
  <br>
