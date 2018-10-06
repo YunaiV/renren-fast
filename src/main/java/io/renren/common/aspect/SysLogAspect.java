@@ -72,7 +72,7 @@ public class SysLogAspect {
 		//请求的参数
 		Object[] args = joinPoint.getArgs();
 		try{
-			String params = new Gson().toJson(args[0]);
+			String params = new Gson().toJson(args);
 			sysLog.setParams(params);
 		}catch (Exception e){
 
