@@ -57,7 +57,7 @@ public class SysRoleController extends AbstractController {
 		
 		//如果不是超级管理员，则只查询自己所拥有的角色列表
 		if(getUserId() != Constant.SUPER_ADMIN){
-			map.put("createUserId", getUserId());
+			map.put("create_user_id", getUserId());
 		}
 		List<SysRoleEntity> list = sysRoleService.selectByMap(map);
 		
