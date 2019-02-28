@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.common.xss;
 
 import org.apache.commons.io.IOUtils;
@@ -16,9 +24,8 @@ import java.util.Map;
 
 /**
  * XSS过滤处理
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-04-01 11:29
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     //没被包装过的HttpServletRequest（特殊场景，需要自己过滤）

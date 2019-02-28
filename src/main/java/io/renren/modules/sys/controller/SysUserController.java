@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.modules.sys.controller;
 
 import io.renren.common.annotation.SysLog;
@@ -23,10 +31,8 @@ import java.util.Map;
 
 /**
  * 系统用户
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年10月31日 上午10:40:10
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 @RestController
 @RequestMapping("/sys/user")
@@ -88,7 +94,7 @@ public class SysUserController extends AbstractController {
 	@GetMapping("/info/{userId}")
 	@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
-		SysUserEntity user = sysUserService.selectById(userId);
+		SysUserEntity user = sysUserService.getById(userId);
 		
 		//获取用户所属的角色列表
 		List<Long> roleIdList = sysUserRoleService.queryRoleIdList(userId);
@@ -107,7 +113,7 @@ public class SysUserController extends AbstractController {
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
 		user.setCreateUserId(getUserId());
-		sysUserService.save(user);
+		sysUserService.saveUser(user);
 		
 		return R.ok();
 	}

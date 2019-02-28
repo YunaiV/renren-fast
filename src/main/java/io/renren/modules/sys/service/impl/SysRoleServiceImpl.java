@@ -1,8 +1,16 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
@@ -25,10 +33,8 @@ import java.util.Map;
 
 /**
  * 角色
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年9月18日 上午9:45:12
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
@@ -44,9 +50,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 		String roleName = (String)params.get("roleName");
 		Long createUserId = (Long)params.get("createUserId");
 
-		Page<SysRoleEntity> page = this.selectPage(
-			new Query<SysRoleEntity>(params).getPage(),
-			new EntityWrapper<SysRoleEntity>()
+		IPage<SysRoleEntity> page = this.page(
+			new Query<SysRoleEntity>().getPage(params),
+			new QueryWrapper<SysRoleEntity>()
 				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
 				.eq(createUserId != null,"create_user_id", createUserId)
 		);
@@ -56,9 +62,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(SysRoleEntity role) {
+    public void saveRole(SysRoleEntity role) {
         role.setCreateTime(new Date());
-        this.insert(role);
+        this.save(role);
 
         //检查权限是否越权
         checkPrems(role);
@@ -83,7 +89,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
     @Transactional(rollbackFor = Exception.class)
     public void deleteBatch(Long[] roleIds) {
         //删除角色
-        this.deleteBatchIds(Arrays.asList(roleIds));
+        this.removeByIds(Arrays.asList(roleIds));
 
         //删除角色与菜单关联
         sysRoleMenuService.deleteBatch(roleIds);

@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.modules.sys.oauth2;
 
 import io.renren.modules.sys.entity.SysUserEntity;
@@ -16,9 +24,7 @@ import java.util.Set;
 /**
  * 认证
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-05-20 14:00
+ * @author Mark sunlightcs@gmail.com
  */
 @Component
 public class OAuth2Realm extends AuthorizingRealm {

@@ -1,9 +1,16 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -21,14 +28,6 @@ import static com.google.common.collect.Lists.newArrayList;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/swagger/**").addResourceLocations("classpath:/static/swagger/");
-    }
-
 
     @Bean
     public Docket createRestApi() {
@@ -48,8 +47,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return new ApiInfoBuilder()
             .title("人人开源")
             .description("renren-fast文档")
-            .termsOfServiceUrl("http://www.renren.io")
-            .version("2.1")
+            .termsOfServiceUrl("https://www.renren.io")
+            .version("3.0.0")
             .build();
     }
 

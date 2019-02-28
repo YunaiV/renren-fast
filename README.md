@@ -60,7 +60,7 @@ renren-fast
 
 
 **技术选型：** 
-- 核心框架：Spring Boot 2.0
+- 核心框架：Spring Boot 2.1
 - 安全框架：Apache Shiro 1.4
 - 视图框架：Spring MVC 5.0
 - 持久层框架：MyBatis 3.3

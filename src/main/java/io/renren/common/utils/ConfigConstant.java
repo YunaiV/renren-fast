@@ -1,10 +1,17 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.common.utils;
 
 /**
  * 系统参数相关Key
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 10:33
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 public class ConfigConstant {
     /**

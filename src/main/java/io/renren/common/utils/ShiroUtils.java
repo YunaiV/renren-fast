@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.common.utils;
 
 import io.renren.common.exception.RRException;
@@ -8,10 +16,8 @@ import org.apache.shiro.subject.Subject;
 
 /**
  * Shiro工具类
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年11月12日 上午9:49:19
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 public class ShiroUtils {
 

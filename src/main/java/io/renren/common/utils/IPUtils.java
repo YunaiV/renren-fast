@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.common.utils;
 
 import com.alibaba.druid.util.StringUtils;
@@ -8,10 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * IP地址
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017年3月8日 下午12:57:02
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 public class IPUtils {
 	private static Logger logger = LoggerFactory.getLogger(IPUtils.class);

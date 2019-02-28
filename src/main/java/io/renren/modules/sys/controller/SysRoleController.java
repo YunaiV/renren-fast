@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.modules.sys.controller;
 
 import io.renren.common.annotation.SysLog;
@@ -18,10 +26,8 @@ import java.util.Map;
 
 /**
  * 角色管理
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年11月8日 下午2:18:33
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 @RestController
 @RequestMapping("/sys/role")
@@ -59,7 +65,7 @@ public class SysRoleController extends AbstractController {
 		if(getUserId() != Constant.SUPER_ADMIN){
 			map.put("create_user_id", getUserId());
 		}
-		List<SysRoleEntity> list = sysRoleService.selectByMap(map);
+		List<SysRoleEntity> list = (List<SysRoleEntity>) sysRoleService.listByMap(map);
 		
 		return R.ok().put("list", list);
 	}
@@ -70,7 +76,7 @@ public class SysRoleController extends AbstractController {
 	@GetMapping("/info/{roleId}")
 	@RequiresPermissions("sys:role:info")
 	public R info(@PathVariable("roleId") Long roleId){
-		SysRoleEntity role = sysRoleService.selectById(roleId);
+		SysRoleEntity role = sysRoleService.getById(roleId);
 		
 		//查询角色对应的菜单
 		List<Long> menuIdList = sysRoleMenuService.queryMenuIdList(roleId);
@@ -89,7 +95,7 @@ public class SysRoleController extends AbstractController {
 		ValidatorUtils.validateEntity(role);
 		
 		role.setCreateUserId(getUserId());
-		sysRoleService.save(role);
+		sysRoleService.saveRole(role);
 		
 		return R.ok();
 	}

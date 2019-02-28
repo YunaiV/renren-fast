@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.modules.app.controller;
 
 
@@ -19,9 +27,8 @@ import java.util.Date;
 
 /**
  * 注册
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 17:27
+ *
+ * @author Mark sunlightcs@gmail.com
  */
 @RestController
 @RequestMapping("/app")
@@ -41,7 +48,7 @@ public class AppRegisterController {
         user.setUsername(form.getMobile());
         user.setPassword(DigestUtils.sha256Hex(form.getPassword()));
         user.setCreateTime(new Date());
-        userService.insert(user);
+        userService.save(user);
 
         return R.ok();
     }

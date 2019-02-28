@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package io.renren.common.utils;
 
 import com.google.gson.Gson;
@@ -10,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Redis工具类
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-07-17 21:12
+ * @author Mark sunlightcs@gmail.com
  */
 @Component
 public class RedisUtils {
