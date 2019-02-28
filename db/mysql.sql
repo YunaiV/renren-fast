@@ -109,7 +109,6 @@ CREATE TABLE `sys_oss` (
 CREATE TABLE `schedule_job` (
   `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务id',
   `bean_name` varchar(200) DEFAULT NULL COMMENT 'spring bean名称',
-  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
   `params` varchar(2000) DEFAULT NULL COMMENT '参数',
   `cron_expression` varchar(100) DEFAULT NULL COMMENT 'cron表达式',
   `status` tinyint(4) DEFAULT NULL COMMENT '任务状态  0：正常  1：暂停',
@@ -123,7 +122,6 @@ CREATE TABLE `schedule_job_log` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
   `job_id` bigint(20) NOT NULL COMMENT '任务id',
   `bean_name` varchar(200) DEFAULT NULL COMMENT 'spring bean名称',
-  `method_name` varchar(100) DEFAULT NULL COMMENT '方法名',
   `params` varchar(2000) DEFAULT NULL COMMENT '参数',
   `status` tinyint(4) NOT NULL COMMENT '任务状态    0：成功    1：失败',
   `error` varchar(2000) DEFAULT NULL COMMENT '失败信息',
@@ -185,8 +183,7 @@ INSERT INTO `sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `
 INSERT INTO `sys_menu`(`menu_id`, `parent_id`, `name`, `url`, `perms`, `type`, `icon`, `order_num`) VALUES (30, 1, '文件上传', 'oss/oss', 'sys:oss:all', 1, 'oss', 6);
 
 INSERT INTO `sys_config` (`param_key`, `param_value`, `status`, `remark`) VALUES ('CLOUD_STORAGE_CONFIG_KEY', '{\"aliyunAccessKeyId\":\"\",\"aliyunAccessKeySecret\":\"\",\"aliyunBucketName\":\"\",\"aliyunDomain\":\"\",\"aliyunEndPoint\":\"\",\"aliyunPrefix\":\"\",\"qcloudBucketName\":\"\",\"qcloudDomain\":\"\",\"qcloudPrefix\":\"\",\"qcloudSecretId\":\"\",\"qcloudSecretKey\":\"\",\"qiniuAccessKey\":\"NrgMfABZxWLo5B-YYSjoE8-AZ1EISdi1Z3ubLOeZ\",\"qiniuBucketName\":\"ios-app\",\"qiniuDomain\":\"http://7xqbwh.dl1.z0.glb.clouddn.com\",\"qiniuPrefix\":\"upload\",\"qiniuSecretKey\":\"uIwJHevMRWU0VLxFvgy0tAcOdGqasdtVlJkdy6vV\",\"type\":1}', '0', '云存储配置信息');
-INSERT INTO `schedule_job` (`bean_name`, `method_name`, `params`, `cron_expression`, `status`, `remark`, `create_time`) VALUES ('testTask', 'test', 'renren', '0 0/30 * * * ?', '0', '有参数测试', '2016-12-01 23:16:46');
-INSERT INTO `schedule_job` (`bean_name`, `method_name`, `params`, `cron_expression`, `status`, `remark`, `create_time`) VALUES ('testTask', 'test2', NULL, '0 0/30 * * * ?', '1', '无参数测试', '2016-12-03 14:55:56');
+INSERT INTO `schedule_job` (`bean_name`, `params`, `cron_expression`, `status`, `remark`, `create_time`) VALUES ('testTask', 'renren', '0 0/30 * * * ?', '0', '参数测试', now());
 
 
 -- 账号：13612345678  密码：admin

@@ -56,7 +56,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 
 		IPage<ScheduleJobEntity> page = this.page(
 			new Query<ScheduleJobEntity>().getPage(params),
-			new QueryWrapper<ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
+			new QueryWrapper <ScheduleJobEntity>().like(StringUtils.isNotBlank(beanName),"bean_name", beanName)
 		);
 
 		return new PageUtils(page);
@@ -94,7 +94,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
 
 	@Override
     public int updateBatch(Long[] jobIds, int status){
-    	Map<String, Object> map = new HashMap<>();
+    	Map<String, Object> map = new HashMap<>(2);
     	map.put("list", jobIds);
     	map.put("status", status);
     	return baseMapper.updateBatch(map);

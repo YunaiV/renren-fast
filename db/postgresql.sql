@@ -110,7 +110,6 @@ CREATE TABLE sys_oss (
 CREATE TABLE schedule_job (
   job_id bigserial,
   bean_name varchar(200),
-  method_name varchar(100),
   params varchar(2000),
   cron_expression varchar(100),
   status int,
@@ -124,7 +123,6 @@ CREATE TABLE schedule_job_log (
   log_id bigserial,
   job_id int8 NOT NULL,
   bean_name varchar(200),
-  method_name varchar(100),
   params varchar(2000),
   status int NOT NULL,
   error varchar(2000),
@@ -181,8 +179,7 @@ INSERT INTO sys_menu(menu_id, parent_id, name, url, perms, type, icon, order_num
 
 INSERT INTO sys_config (param_key, param_value, status, remark) VALUES ('CLOUD_STORAGE_CONFIG_KEY',  '{"aliyunAccessKeyId":"","aliyunAccessKeySecret":"","aliyunBucketName":"","aliyunDomain":"","aliyunEndPoint":"","aliyunPrefix":"","qcloudBucketName":"","qcloudDomain":"","qcloudPrefix":"","qcloudSecretId":"","qcloudSecretKey":"","qiniuAccessKey":"NrgMfABZxWLo5B-YYSjoE8-AZ1EISdi1Z3ubLOeZ","qiniuBucketName":"ios-app","qiniuDomain":"http://7xlij2.com1.z0.glb.clouddn.com","qiniuPrefix":"upload","qiniuSecretKey":"uIwJHevMRWU0VLxFvgy0tAcOdGqasdtVlJkdy6vV","type":1}', '0', '云存储配置信息');
 
-INSERT INTO schedule_job (bean_name, method_name, params, cron_expression, status, remark, create_time) VALUES ('testTask', 'test', 'renren', '0 0/30 * * * ?', '0', '有参数测试', '2016-12-01 23:16:46');
-INSERT INTO schedule_job (bean_name, method_name, params, cron_expression, status, remark, create_time) VALUES ('testTask', 'test2', NULL, '0 0/30 * * * ?', '1', '无参数测试', '2016-12-03 14:55:56');
+INSERT INTO schedule_job (bean_name, params, cron_expression, status, remark, create_time) VALUES ('testTask',  'renren', '0 0/30 * * * ?', '0', '参数测试', '2016-12-01 23:16:46');
 
 
 -- 账号：13612345678  密码：admin
