@@ -94,8 +94,10 @@ renren-fast
 - 演示地址：http://fast.demo.renren.io
 - 账号密码：admin/admin
 <br> 
+
 **接口文档效果图：**
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0728/145341_73ba6f75_63154.jpeg "在这里输入图片标题")
+
 <br> <br> <br> 
 
 
