@@ -2,6 +2,8 @@
 - renren-fast是一个轻量级的，前后端分离的Java快速开发平台，能快速开发项目并交付【接私活利器】
 - 支持MySQL、Oracle、SQL Server、PostgreSQL等主流数据库
 - 前端地址：https://gitee.com/renrenio/renren-fast-vue
+- 代码生成器：https://gitee.com/renrenio/renren-generator
+
 <br> 
 <br>
  
@@ -50,7 +52,6 @@ renren-fast
 **如何交流、反馈、参与贡献？** 
 - 开发文档：https://www.renren.io/guide
 - Git仓库：https://gitee.com/renrenio/renren-fast
-- 代码生成器：https://gitee.com/renrenio/renren-generator
 - [人人开源社区](https://www.renren.io/community)：https://www.renren.io/community
 - 官方QQ群：324780204、145799952
 - 技术讨论、二次开发等咨询、问题和建议，请移步到人人开源社区，我会在第一时间进行解答和回复！
