@@ -83,7 +83,8 @@ renren-fast
 - 执行db/mysql.sql文件，初始化数据
 - 修改application-dev.yml，更新MySQL账号和密码
 - Eclipse、IDEA运行RenrenApplication.java，则可启动项目
-- Swagger路径：http://localhost:8080/renren-fast/swagger/index.html
+- Swagger文档路径：http://localhost:8080/renren-fast/swagger/index.html
+- Swagger注解路径：http://localhost:8080/renren-fast/swagger-ui.html
 
 <br> 
 
