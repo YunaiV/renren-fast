@@ -97,7 +97,7 @@ renren-fast
  <br>
 
  **项目演示**
-- 演示地址：http://fast.demo.renren.io
+- 演示地址：http://demo.open.renren.io/renren-fast
 - 账号密码：admin/admin
 <br> 
 
