@@ -22,6 +22,7 @@ import java.io.Serializable;
 @Data
 @TableName("sys_role_menu")
 public class SysRoleMenuEntity implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@TableId
@@ -36,5 +37,5 @@ public class SysRoleMenuEntity implements Serializable {
 	 * 菜单ID
 	 */
 	private Long menuId;
-	
+
 }

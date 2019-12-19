@@ -26,8 +26,9 @@ import java.util.List;
 @Data
 @TableName("sys_role")
 public class SysRoleEntity implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * 角色ID
 	 */
@@ -44,19 +45,18 @@ public class SysRoleEntity implements Serializable {
 	 * 备注
 	 */
 	private String remark;
-	
+
 	/**
 	 * 创建者ID
 	 */
 	private Long createUserId;
 
-	@TableField(exist=false)
-	private List<Long> menuIdList;
-	
 	/**
 	 * 创建时间
 	 */
 	private Date createTime;
 
-	
+    @TableField(exist=false)
+    private List<Long> menuIdList;
+
 }

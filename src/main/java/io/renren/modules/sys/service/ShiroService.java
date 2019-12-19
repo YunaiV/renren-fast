@@ -19,6 +19,7 @@ import java.util.Set;
  * @author Mark sunlightcs@gmail.com
  */
 public interface ShiroService {
+
     /**
      * 获取用户权限列表
      */
